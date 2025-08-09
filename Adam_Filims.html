@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adam Filims - Quotation Maker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #091f36 0%, #0f2862 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .form-section, .preview-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-section h2, .preview-section h2 {
+            color: #0f2862;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #0f2862;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #091f36;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #0f2862;
+        }
+
+        .date-service-row {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #0f2862;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .service-item label {
+            margin-bottom: 0;
+            flex: 1;
+        }
+
+        .service-item input {
+            width: 80px;
+            margin-bottom: 0;
+        }
+
+        .btn {
+            background: #0f2862;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #091f36;
+        }
+
+        .btn-secondary {
+            background: #4f5f76;
+        }
+
+        .btn-secondary:hover {
+            background: #3a4456;
+        }
+
+        .btn-danger {
+            background: #9e363a;
+        }
+
+        .btn-danger:hover {
+            background: #7a2b2e;
+        }
+
+        .pricing-section {
+            background: #f0f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .pricing-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quotation-preview {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 14px;
+            line-height: 1.6;
+            page-break-inside: avoid;
+        }
+
+        .quotation-header {
+            text-align: center;
+            border-bottom: 2px solid #0f2862;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            page-break-after: avoid;
+        }
+
+        .quotation-header h1 {
+            color: #0f2862;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .quotation-content {
+            margin-bottom: 25px;
+        }
+
+        .service-breakdown {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+
+        .total-section {
+            background: #0f2862;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+
+        .payment-schedule {
+            background: #f0f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+
+        .terms {
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+            margin-top: 20px;
+            page-break-inside: avoid;
+        }
+
+        .export-buttons {
+            text-align: center;
+            margin-top: 20px;
+            gap: 10px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-section, .preview-section {
+                padding: 20px;
+            }
+        }
+
+        .admin-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ADAM FILIMS</h1>
+            <p>Professional Wedding Photography & Videography</p>
+            <p>☎ +91 8147956159 | 📷 @adam_filims</p>
+        </div>
+
+        <!-- Admin Panel Toggle -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button class="btn btn-secondary" onclick="toggleAdmin()">⚙ Admin Settings</button>
+        </div>
+
+        <!-- Admin Panel -->
+        <div id="adminPanel" class="admin-section hidden">
+            <h3>Admin Settings</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div class="form-group">
+                    <label>Photographer Rate (per day):</label>
+                    <input type="number" id="photographerRate" value="5000" onchange="saveSettings()">
+                </div>
+                <div class="form-group">
+                    <label>Videographer Rate (per day):</label>
+                    <input type="number" id="videographerRate" value="7000" onchange="saveSettings()">
+                </div>
+                <div class="form-group">
+                    <label>Drone Rate (per event):</label>
+                    <input type="number" id="droneRate" value="15000" onchange="saveSettings()">
+                </div>
+                <div class="form-group">
+                    <label>Business Address:</label>
+                    <input type="text" id="businessAddress" value="Bangalore, Karnataka" onchange="saveSettings()">
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Form Section -->
+            <div class="form-section">
+                <h2>📋 Quotation Details</h2>
+                
+                <div class="form-group">
+                    <label>Client Name:</label>
+                    <input type="text" id="clientName" placeholder="Enter client name" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Contact Number:</label>
+                    <input type="tel" id="contactNumber" placeholder="Enter contact number" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Venue Name:</label>
+                    <input type="text" id="venueName" placeholder="Enter venue name" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Notes:</label>
+                    <textarea id="additionalNotes" rows="3" placeholder="Any special requirements or notes" oninput="updatePreview()"></textarea>
+                </div>
+
+                <!-- Event Dates and Services -->
+                <div id="eventDates">
+                    <h3 style="color: #0f2862; margin: 20px 0 15px 0;">📅 Event Dates & Services</h3>
+                </div>
+
+                <button class="btn" onclick="addDateService()">✚ Add Event Date</button>
+
+                <!-- Pricing Section -->
+                <div class="pricing-section">
+                    <h3 style="color: #0f2862; margin-bottom: 15px;">💰 Pricing</h3>
+                    
+                    <div class="pricing-toggle">
+                        <button class="btn" id="autoBtn" onclick="setPricingMode('auto')">Auto Calculate</button>
+                        <button class="btn btn-secondary" id="fixedBtn" onclick="setPricingMode('fixed')">Fixed Package</button>
+                    </div>
+
+                    <div id="fixedPricing" class="hidden">
+                        <div class="form-group">
+                            <label>Package Amount (₹):</label>
+                            <input type="number" id="fixedAmount" placeholder="Enter package amount" oninput="updatePreview()">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Booking Advance (₹):</label>
+                        <input type="number" id="bookingAdvance" placeholder="Enter advance amount" oninput="updatePreview()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pre-Wedding Payment (₹):</label>
+                        <input type="number" id="preWeddingPayment" placeholder="Enter pre-wedding payment" oninput="updatePreview()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Wedding Day Payment (₹):</label>
+                        <input type="number" id="weddingDayPayment" placeholder="Enter wedding day payment" oninput="updatePreview()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Final Payment (₹):</label>
+                        <input type="number" id="finalPayment" placeholder="Enter final payment" oninput="updatePreview()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="preview-section">
+                <h2>Quotation Preview</h2>
+                
+                <div id="quotationPreview" class="quotation-preview">
+                    <!-- Preview content will be generated here -->
+                </div>
+
+                <div class="export-buttons">
+                    <button class="btn" onclick="exportPDF()">📄 Download PDF</button>
+                    <button class="btn btn-secondary" onclick="exportImage()">🖼 Save as Image</button>
+                    <button class="btn btn-secondary" onclick="printQuotation()">🖨 Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        let eventDatesCount = 0;
+        let pricingMode = 'auto';
+
+        // Initialize with one date
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            addDateService();
+            updatePreview();
+        });
+
+        function loadSettings() {
+            const photographerRate = localStorage.getItem('photographerRate') || '5000';
+            const videographerRate = localStorage.getItem('videographerRate') || '7000';
+            const droneRate = localStorage.getItem('droneRate') || '15000';
+            const businessAddress = localStorage.getItem('businessAddress') || 'Bangalore, Karnataka';
+
+            document.getElementById('photographerRate').value = photographerRate;
+            document.getElementById('videographerRate').value = videographerRate;
+            document.getElementById('droneRate').value = droneRate;
+            document.getElementById('businessAddress').value = businessAddress;
+        }
+
+        function saveSettings() {
+            localStorage.setItem('photographerRate', document.getElementById('photographerRate').value);
+            localStorage.setItem('videographerRate', document.getElementById('videographerRate').value);
+            localStorage.setItem('droneRate', document.getElementById('droneRate').value);
+            localStorage.setItem('businessAddress', document.getElementById('businessAddress').value);
+            updatePreview();
+        }
+
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('hidden');
+        }
+
+        function addDateService() {
+            eventDatesCount++;
+            const eventDatesDiv = document.getElementById('eventDates');
+            
+            const dateServiceHTML = `
+                <div class="date-service-row" id="dateService${eventDatesCount}">
+                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px;">
+                        <h4 style="color: #0f2862;">Event Day ${eventDatesCount}</h4>
+                        ${eventDatesCount > 1 ? `<button class="btn btn-danger" onclick="removeDateService(${eventDatesCount})" style="margin-left: auto; padding: 5px 10px; font-size: 12px;">✕ Remove</button>` : ''}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Event Date:</label>
+                        <input type="date" id="eventDate${eventDatesCount}" oninput="updatePreview()">
+                    </div>
+
+                    <div class="service-grid">
+                        <div class="service-item">
+                            <label>Candid Photographers:</label>
+                            <input type="number" id="candidPhotographers${eventDatesCount}" min="0" max="5" value="0" oninput="updatePreview()">
+                        </div>
+                        <div class="service-item">
+                            <label>Traditional Photographers:</label>
+                            <input type="number" id="traditionalPhotographers${eventDatesCount}" min="0" max="5" value="0" oninput="updatePreview()">
+                        </div>
+                        <div class="service-item">
+                            <label>Candid Videographers:</label>
+                            <input type="number" id="candidVideographers${eventDatesCount}" min="0" max="5" value="0" oninput="updatePreview()">
+                        </div>
+                        <div class="service-item">
+                            <label>Traditional Videographers:</label>
+                            <input type="number" id="traditionalVideographers${eventDatesCount}" min="0" max="5" value="0" oninput="updatePreview()">
+                        </div>
+                        <div class="service-item">
+                            <label>Drone Service:</label>
+                            <select id="droneService${eventDatesCount}" onchange="updatePreview()">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            eventDatesDiv.insertAdjacentHTML('beforeend', dateServiceHTML);
+            updatePreview();
+        }
+
+        function removeDateService(id) {
+            document.getElementById(`dateService${id}`).remove();
+            updatePreview();
+        }
+
+        function setPricingMode(mode) {
+            pricingMode = mode;
+            const autoBtn = document.getElementById('autoBtn');
+            const fixedBtn = document.getElementById('fixedBtn');
+            const fixedPricing = document.getElementById('fixedPricing');
+
+            if (mode === 'auto') {
+                autoBtn.className = 'btn';
+                fixedBtn.className = 'btn btn-secondary';
+                fixedPricing.classList.add('hidden');
+            } else {
+                autoBtn.className = 'btn btn-secondary';
+                fixedBtn.className = 'btn';
+                fixedPricing.classList.remove('hidden');
+            }
+            updatePreview();
+        }
+
+        function calculateTotal() {
+            if (pricingMode === 'fixed') {
+                return parseInt(document.getElementById('fixedAmount').value) || 0;
+            }
+
+            let total = 0;
+            const photographerRate = parseInt(document.getElementById('photographerRate').value) || 5000;
+            const videographerRate = parseInt(document.getElementById('videographerRate').value) || 7000;
+            const droneRate = parseInt(document.getElementById('droneRate').value) || 15000;
+
+            // Calculate for each event date
+            for (let i = 1; i <= eventDatesCount; i++) {
+                const dateElement = document.getElementById(`eventDate${i}`);
+                if (!dateElement) continue;
+
+                const candidPhotographers = parseInt(document.getElementById(`candidPhotographers${i}`)?.value) || 0;
+                const traditionalPhotographers = parseInt(document.getElementById(`traditionalPhotographers${i}`)?.value) || 0;
+                const candidVideographers = parseInt(document.getElementById(`candidVideographers${i}`)?.value) || 0;
+                const traditionalVideographers = parseInt(document.getElementById(`traditionalVideographers${i}`)?.value) || 0;
+                const droneService = document.getElementById(`droneService${i}`)?.value === 'yes';
+
+                total += (candidPhotographers + traditionalPhotographers) * photographerRate;
+                total += (candidVideographers + traditionalVideographers) * videographerRate;
+                if (droneService) total += droneRate;
+            }
+
+            return total;
+        }
+
+        function updatePreview() {
+            const clientName = document.getElementById('clientName').value || '[Client Name]';
+            const contactNumber = document.getElementById('contactNumber').value || '[Contact Number]';
+            const venueName = document.getElementById('venueName').value || '[Venue Name]';
+            const additionalNotes = document.getElementById('additionalNotes').value || '';
+            const businessAddress = document.getElementById('businessAddress').value || 'Mangaluru, Karnataka';
+
+            const bookingAdvance = parseInt(document.getElementById('bookingAdvance').value) || 0;
+            const preWeddingPayment = parseInt(document.getElementById('preWeddingPayment').value) || 0;
+            const weddingDayPayment = parseInt(document.getElementById('weddingDayPayment').value) || 0;
+            const finalPayment = parseInt(document.getElementById('finalPayment').value) || 0;
+
+            const total = calculateTotal();
+
+            let servicesHTML = '';
+            for (let i = 1; i <= eventDatesCount; i++) {
+                const dateElement = document.getElementById(`eventDate${i}`);
+                if (!dateElement) continue;
+
+                const eventDate = dateElement.value || '[Event Date]';
+                const candidPhotographers = parseInt(document.getElementById(`candidPhotographers${i}`)?.value) || 0;
+                const traditionalPhotographers = parseInt(document.getElementById(`traditionalPhotographers${i}`)?.value) || 0;
+                const candidVideographers = parseInt(document.getElementById(`candidVideographers${i}`)?.value) || 0;
+                const traditionalVideographers = parseInt(document.getElementById(`traditionalVideographers${i}`)?.value) || 0;
+                const droneService = document.getElementById(`droneService${i}`)?.value === 'yes';
+
+                if (candidPhotographers > 0 || traditionalPhotographers > 0 || candidVideographers > 0 || traditionalVideographers > 0 || droneService) {
+                    servicesHTML += `
+                        <div class="service-breakdown">
+                            <h4>📅 ${eventDate}</h4>
+                            ${candidPhotographers > 0 ? `<p>📸 Candid Photographers: ${candidPhotographers}</p>` : ''}
+                            ${traditionalPhotographers > 0 ? `<p>📷 Traditional Photographers: ${traditionalPhotographers}</p>` : ''}
+                            ${candidVideographers > 0 ? `<p>🎥 Candid Videographers: ${candidVideographers}</p>` : ''}
+                            ${traditionalVideographers > 0 ? `<p>🎬 Traditional Videographers: ${traditionalVideographers}</p>` : ''}
+                            ${droneService ? `<p>🚁 Drone Service: Yes</p>` : ''}
+                        </div>
+                    `;
+                }
+            }
+
+            const quotationHTML = `
+                <div class="quotation-header">
+                    <h1>ADAM FILIMS</h1>
+                    <p><strong>Professional Wedding Photography & Videography</strong></p>
+                    <p>☎ +91 8147956159</p>
+                    <p>📍 ${businessAddress}</p>
+                    <p>📷 Instagram: @adam_filims</p>
+                </div>
+
+                <div class="quotation-content">
+                    <h3 style="color: #0f2862; margin-bottom: 15px;">SERVICE CONTRACT AGREEMENT</h3>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #0f2862;">Parties</h4>
+                        <p>The service contract agreement is entered into on <strong>${new Date().toLocaleDateString('en-GB')}</strong> by <strong>Adam Filims</strong> with an address of <strong>${businessAddress}</strong> and with <strong>${clientName}</strong> with an address of <strong>${venueName}</strong>.</p>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #0f2862;">Consideration</h4>
+                        <p>The parties agree that the wedding company Adam Filims will provide the photography services attached hereunder whereas the client will in return provide compensation for service and expertise.</p>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #0f2862;">Service</h4>
+                        <p>The consultant's services are summarised as follows:</p>
+                        ${servicesHTML || '<p>No services selected yet</p>'}
+                    </div>
+
+                    <div class="total-section">
+                        <h3>TOTAL PACKAGE AMOUNT</h3>
+                        <h2>₹${total.toLocaleString('en-IN')}</h2>
+                    </div>
+
+                    ${(bookingAdvance > 0 || preWeddingPayment > 0 || weddingDayPayment > 0 || finalPayment > 0) ? `
+                        <div class="payment-schedule">
+                            <h4 style="color: #0f2862;">Payment Schedule:</h4>
+                            ${bookingAdvance > 0 ? `<p>💰 Booking Advance: ₹${bookingAdvance.toLocaleString('en-IN')}</p>` : ''}
+                            ${preWeddingPayment > 0 ? `<p>💰 Pre-Wedding Payment: ₹${preWeddingPayment.toLocaleString('en-IN')}</p>` : ''}
+                            ${weddingDayPayment > 0 ? `<p>💰 Wedding Day Payment: ₹${weddingDayPayment.toLocaleString('en-IN')}</p>` : ''}
+                            ${finalPayment > 0 ? `<p>💰 Final Payment: ₹${finalPayment.toLocaleString('en-IN')}</p>` : ''}
+                        </div>
+                    ` : ''}
+
+                    <p style="margin: 20px 0;"><strong>All the output will be delivered within 30 days from after selecting photos.</strong></p>
+                    
+                    <p style="margin: 20px 0;">Thank you for doing business with us. If there is any issue or you require clarification please let me know.</p>
+                    
+                    <p style="margin: 20px 0;"><strong>Contact us:</strong> +91 8147956159 (Shadeed)</p>
+                    
+                    <p style="margin: 20px 0; text-align: center;"><strong>E. & O.E.</strong></p>
+
+                    <div class="terms">
+                        <h4 style="color: #0f2862;">TERMS AND CONDITIONS</h4>
+                        <p><strong>• Accommodation Extra</strong></p>
+                        <p>• In Case of extra print @ INR 600 will be charged per leaf both side (per leaf 12 photos)</p>
+                        <p>• 10% of package amount needs to pay as advance</p>
+                        <p>• 80% needs to pay on the event date</p>
+                        <p>• Balance Amount 10% needs to pay on the date of full work delivery</p>
+                        <p>• All the output will be given within 30 days after selecting album</p>
+                        <p>• Client is responsible for vendor meals during event</p>
+                        <p>• Weather conditions may affect outdoor shoots</p>
+                        <p>• Travel charges may apply for destinations beyond 50km</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('quotationPreview').innerHTML = quotationHTML;
+        }
+
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const element = document.getElementById('quotationPreview');
+            
+            // Create a clone for PDF formatting
+            const clone = element.cloneNode(true);
+            clone.style.width = '210mm';
+            clone.style.maxWidth = 'none';
+            clone.style.padding = '20mm';
+            clone.style.margin = '0';
+            clone.style.background = 'white';
+            clone.style.fontSize = '12px';
+            clone.style.lineHeight = '1.4';
+            
+            // Temporarily add clone to body for rendering
+            document.body.appendChild(clone);
+            
+            html2canvas(clone, {
+                scale: 3,
+                useCORS: true,
+                letterRendering: true,
+                allowTaint: false,
+                backgroundColor: '#ffffff',
+                width: clone.scrollWidth,
+                height: clone.scrollHeight
+            }).then(canvas => {
+                // Remove clone
+                document.body.removeChild(clone);
+                
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = 210;
+                const pageHeight = 297;
+                const margin = 10;
+                const maxWidth = pageWidth - (margin * 2);
+                const maxHeight = pageHeight - (margin * 2);
+                
+                const imgWidth = maxWidth;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                let currentHeight = 0;
+                let pageCount = 1;
+                
+                // If content fits on one page
+                if (imgHeight <= maxHeight) {
+                    pdf.addImage(canvas, 'PNG', margin, margin, imgWidth, imgHeight, '', 'FAST');
+                } else {
+                    // Multiple pages needed
+                    const totalPages = Math.ceil(imgHeight / maxHeight);
+                    
+                    for (let i = 0; i < totalPages; i++) {
+                        if (i > 0) {
+                            pdf.addPage();
+                        }
+                        
+                        const sourceY = (canvas.height / totalPages) * i;
+                        const sourceHeight = canvas.height / totalPages;
+                        
+                        // Create a temporary canvas for this page
+                        const pageCanvas = document.createElement('canvas');
+                        const pageCtx = pageCanvas.getContext('2d');
+                        
+                        pageCanvas.width = canvas.width;
+                        pageCanvas.height = sourceHeight;
+                        
+                        // Fill with white background
+                        pageCtx.fillStyle = 'white';
+                        pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+                        
+                        // Draw the portion of the original canvas
+                        pageCtx.drawImage(
+                            canvas,
+                            0, sourceY, canvas.width, sourceHeight,
+                            0, 0, pageCanvas.width, pageCanvas.height
+                        );
+                        
+                        const pageImgHeight = maxHeight;
+                        pdf.addImage(pageCanvas, 'PNG', margin, margin, imgWidth, pageImgHeight, '', 'FAST');
+                    }
+                }
+                
+                const clientName = document.getElementById('clientName').value || 'Client';
+                pdf.save(`${clientName}_Wedding_Contract.pdf`);
+            }).catch(error => {
+                console.error('PDF generation error:', error);
+                // Fallback to simple PDF generation
+                window.print();
+            });
+        }
+
+        function exportImage() {
+            const element = document.getElementById('quotationPreview');
+            
+            html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                letterRendering: 1,
+                allowTaint: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                const clientName = document.getElementById('clientName').value || 'Client';
+                link.download = `${clientName}_Wedding_Quotation.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function printQuotation() {
+            const printWindow = window.open('', '_blank');
+            const quotationContent = document.getElementById('quotationPreview').innerHTML;
+            
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Adam Filims - Wedding Quotation</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            .quotation-preview { background: white; }
+                            .quotation-header { text-align: center; border-bottom: 2px solid #0f2862; padding-bottom: 20px; margin-bottom: 25px; }
+                            .quotation-header h1 { color: #0f2862; font-size: 2rem; margin-bottom: 10px; }
+                            .service-breakdown { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; }
+                            .total-section { background: #0f2862; color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
+                            .payment-schedule { background: #f0f4f8; padding: 15px; border-radius: 8px; margin: 15px 0; }
+                            .terms { font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 15px; margin-top: 20px; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="quotation-preview">${quotationContent}</div>
+                    </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
+</body>
+</html>
