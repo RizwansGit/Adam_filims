@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+// Initialize with one date and set default pricing mode
+        document.addEventListener('DOMContentLoaded', function() {
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -152,14 +154,6 @@
             background: #7a2b2e;
         }
 
-        .btn-success {
-            background: #28a745;
-        }
-
-        .btn-success:hover {
-            background: #218838;
-        }
-
         .pricing-section {
             background: #f0f4f8;
             padding: 20px;
@@ -245,15 +239,6 @@
             flex-wrap: wrap;
         }
 
-        .done-section {
-            text-align: center;
-            margin: 20px 0;
-            padding: 20px;
-            background: #e8f5e8;
-            border-radius: 10px;
-            border: 2px solid #28a745;
-        }
-
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -278,15 +263,6 @@
 
         .hidden {
             display: none;
-        }
-
-        .calculation-debug {
-            background: #f0f0f0;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            font-family: monospace;
-            font-size: 12px;
         }
     </style>
 </head>
@@ -394,16 +370,6 @@
                         <input type="number" id="finalPayment" placeholder="Enter final payment" oninput="updatePreview()">
                     </div>
                 </div>
-
-                <!-- Done Button -->
-                <div class="done-section">
-                    <button class="btn btn-success" onclick="markDone()" style="font-size: 18px; padding: 15px 30px;">
-                        ✓ Done - Finalize Quotation
-                    </button>
-                    <p style="margin-top: 10px; font-size: 14px; color: #666;">
-                        Click when all details are entered to calculate final amounts
-                    </p>
-                </div>
             </div>
 
             <!-- Preview Section -->
@@ -430,7 +396,6 @@
     <script>
         let eventDatesCount = 0;
         let pricingMode = 'auto';
-        let isFinalized = false;
 
         // Initialize with one date
         document.addEventListener('DOMContentLoaded', function() {
@@ -440,16 +405,22 @@
         });
 
         function loadSettings() {
-            // Don't use localStorage in Claude.ai environment
-            // Use default values
-            document.getElementById('photographerRate').value = '5000';
-            document.getElementById('videographerRate').value = '7000';
-            document.getElementById('droneRate').value = '15000';
-            document.getElementById('businessAddress').value = 'Mangaluru, Karnataka';
+            const photographerRate = localStorage.getItem('photographerRate') || '5000';
+            const videographerRate = localStorage.getItem('videographerRate') || '7000';
+            const droneRate = localStorage.getItem('droneRate') || '15000';
+            const businessAddress = localStorage.getItem('businessAddress') || 'Bangalore, Karnataka';
+
+            document.getElementById('photographerRate').value = photographerRate;
+            document.getElementById('videographerRate').value = videographerRate;
+            document.getElementById('droneRate').value = droneRate;
+            document.getElementById('businessAddress').value = businessAddress;
         }
 
         function saveSettings() {
-            // Settings are saved in memory only
+            localStorage.setItem('photographerRate', document.getElementById('photographerRate').value);
+            localStorage.setItem('videographerRate', document.getElementById('videographerRate').value);
+            localStorage.setItem('droneRate', document.getElementById('droneRate').value);
+            localStorage.setItem('businessAddress', document.getElementById('businessAddress').value);
             updatePreview();
         }
 
@@ -464,7 +435,7 @@
             
             const dateServiceHTML = `
                 <div class="date-service-row" id="dateService${eventDatesCount}">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px;">
                         <h4 style="color: #0f2862;">Event Day ${eventDatesCount}</h4>
                         ${eventDatesCount > 1 ? `<button class="btn btn-danger" onclick="removeDateService(${eventDatesCount})" style="margin-left: auto; padding: 5px 10px; font-size: 12px;">✕ Remove</button>` : ''}
                     </div>
@@ -529,36 +500,15 @@
             updatePreview();
         }
 
-        function markDone() {
-            isFinalized = true;
-            updatePreview();
-            
-            // Show success message
-            const btn = event.target;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '✅ Quotation Finalized!';
-            btn.style.background = '#218838';
-            
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = '#28a745';
-            }, 2000);
-        }
-
         function calculateTotal() {
             if (pricingMode === 'fixed') {
-                const fixedAmount = parseInt(document.getElementById('fixedAmount').value) || 0;
-                console.log('Fixed pricing mode, amount:', fixedAmount);
-                return fixedAmount;
+                return parseInt(document.getElementById('fixedAmount').value) || 0;
             }
 
             let total = 0;
             const photographerRate = parseInt(document.getElementById('photographerRate').value) || 5000;
             const videographerRate = parseInt(document.getElementById('videographerRate').value) || 7000;
             const droneRate = parseInt(document.getElementById('droneRate').value) || 15000;
-
-            console.log('Auto calculation mode');
-            console.log('Rates - Photographer:', photographerRate, 'Videographer:', videographerRate, 'Drone:', droneRate);
 
             // Calculate for each event date
             for (let i = 1; i <= eventDatesCount; i++) {
@@ -571,24 +521,11 @@
                 const traditionalVideographers = parseInt(document.getElementById(`traditionalVideographers${i}`)?.value) || 0;
                 const droneService = document.getElementById(`droneService${i}`)?.value === 'yes';
 
-                const dayTotal = 
-                    (candidPhotographers + traditionalPhotographers) * photographerRate +
-                    (candidVideographers + traditionalVideographers) * videographerRate +
-                    (droneService ? droneRate : 0);
-
-                console.log(`Day ${i}:`, {
-                    candidPhotographers,
-                    traditionalPhotographers,
-                    candidVideographers,
-                    traditionalVideographers,
-                    droneService,
-                    dayTotal
-                });
-
-                total += dayTotal;
+                total += (candidPhotographers + traditionalPhotographers) * photographerRate;
+                total += (candidVideographers + traditionalVideographers) * videographerRate;
+                if (droneService) total += droneRate;
             }
 
-            console.log('Final total:', total);
             return total;
         }
 
@@ -621,7 +558,7 @@
                 if (candidPhotographers > 0 || traditionalPhotographers > 0 || candidVideographers > 0 || traditionalVideographers > 0 || droneService) {
                     servicesHTML += `
                         <div class="service-breakdown">
-                            <h4>📅 ${new Date(eventDate).toLocaleDateString('en-GB') || eventDate}</h4>
+                            <h4>📅 ${eventDate}</h4>
                             ${candidPhotographers > 0 ? `<p>📸 Candid Photographers: ${candidPhotographers}</p>` : ''}
                             ${traditionalPhotographers > 0 ? `<p>📷 Traditional Photographers: ${traditionalPhotographers}</p>` : ''}
                             ${candidVideographers > 0 ? `<p>🎥 Candid Videographers: ${candidVideographers}</p>` : ''}
@@ -663,7 +600,6 @@
                     <div class="total-section">
                         <h3>TOTAL PACKAGE AMOUNT</h3>
                         <h2>₹${total.toLocaleString('en-IN')}</h2>
-                        ${isFinalized ? '<p style="margin-top: 10px;">✅ Finalized</p>' : ''}
                     </div>
 
                     ${(bookingAdvance > 0 || preWeddingPayment > 0 || weddingDayPayment > 0 || finalPayment > 0) ? `
@@ -704,103 +640,84 @@
 
         function exportPDF() {
             const { jsPDF } = window.jspdf;
+            const element = document.getElementById('quotationPreview');
             const clientName = document.getElementById('clientName').value || 'Client';
             
-            // Create PDF in A4 portrait format
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
-            });
-
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const margin = 15;
+            // Create PDF with proper content
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = 210;
+            const pageHeight = 297;
+            const margin = 20;
+            const lineHeight = 6;
             let currentY = margin;
 
-            // Set font
-            pdf.setFont('helvetica');
-
-            // Helper function to add text with automatic line breaks
-            function addText(text, x, y, maxWidth, fontSize = 10, color = [0, 0, 0], isBold = false) {
-                pdf.setFontSize(fontSize);
-                pdf.setTextColor(color[0], color[1], color[2]);
-                if (isBold) {
-                    pdf.setFont('helvetica', 'bold');
-                } else {
-                    pdf.setFont('helvetica', 'normal');
-                }
-                
+            // Helper function to add text with word wrap
+            function addText(text, x, y, maxWidth = pageWidth - 2 * margin) {
                 const lines = pdf.splitTextToSize(text, maxWidth);
                 pdf.text(lines, x, y);
-                return y + (lines.length * (fontSize * 0.4));
-            }
-
-            function checkPageBreak(neededSpace = 20) {
-                if (currentY + neededSpace > pageHeight - margin) {
-                    pdf.addPage();
-                    currentY = margin;
-                }
+                return y + (lines.length * lineHeight);
             }
 
             // Header
-            currentY = addText('ADAM FILIMS', pageWidth / 2, currentY, pageWidth - 2 * margin, 20, [15, 40, 98], true);
-            pdf.setFont('helvetica', 'normal');
-            pdf.text('ADAM FILIMS', pageWidth / 2, currentY - 8, { align: 'center' });
+            pdf.setFontSize(24);
+            pdf.setTextColor(15, 40, 98); // Adam Filims blue
+            pdf.text('ADAM FILIMS', pageWidth / 2, currentY, { align: 'center' });
             
-            currentY += 5;
-            currentY = addText('Professional Wedding Photography & Videography', pageWidth / 2, currentY, pageWidth - 2 * margin, 12);
-            pdf.text('Professional Wedding Photography & Videography', pageWidth / 2, currentY - 4, { align: 'center' });
+            currentY += 8;
+            pdf.setFontSize(12);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('Professional Wedding Photography & Videography', pageWidth / 2, currentY, { align: 'center' });
             
-            currentY += 3;
-            const businessAddress = document.getElementById('businessAddress').value || 'Mangaluru, Karnataka';
-            currentY = addText(`☎ +91 8147956159 | 📍 ${businessAddress}`, pageWidth / 2, currentY, pageWidth - 2 * margin, 10);
-            pdf.text(`☎ +91 8147956159 | 📍 ${businessAddress}`, pageWidth / 2, currentY - 3, { align: 'center' });
+            currentY += 6;
+            const businessAddress = document.getElementById('businessAddress').value || 'Bangalore, Karnataka';
+            pdf.text(`📞 +91 8147956159 | 📍 ${businessAddress}`, pageWidth / 2, currentY, { align: 'center' });
+            pdf.text('📷 Instagram: @adam_filims', pageWidth / 2, currentY + 6, { align: 'center' });
             
-            currentY += 3;
-            currentY = addText('📷 Instagram: @adam_filims', pageWidth / 2, currentY, pageWidth - 2 * margin, 10);
-            pdf.text('📷 Instagram: @adam_filims', pageWidth / 2, currentY - 3, { align: 'center' });
+            currentY += 20;
             
-            currentY += 10;
-
-            // Draw separator line
+            // Draw line
             pdf.setDrawColor(15, 40, 98);
             pdf.setLineWidth(0.5);
             pdf.line(margin, currentY, pageWidth - margin, currentY);
             currentY += 10;
 
-            // Contract Agreement Title
-            currentY = addText('SERVICE CONTRACT AGREEMENT', pageWidth / 2, currentY, pageWidth - 2 * margin, 16, [15, 40, 98], true);
-            pdf.text('SERVICE CONTRACT AGREEMENT', pageWidth / 2, currentY - 6, { align: 'center' });
-            currentY += 10;
+            // Title
+            pdf.setFontSize(16);
+            pdf.setTextColor(15, 40, 98);
+            pdf.text('SERVICE CONTRACT AGREEMENT', pageWidth / 2, currentY, { align: 'center' });
+            currentY += 15;
 
-            // Parties Section
-            checkPageBreak(30);
-            currentY = addText('Parties', margin, currentY, pageWidth - 2 * margin, 12, [15, 40, 98], true);
-            currentY += 3;
+            // Parties
+            pdf.setFontSize(12);
+            pdf.setTextColor(15, 40, 98);
+            pdf.text('Parties', margin, currentY);
+            currentY += 8;
             
+            pdf.setTextColor(0, 0, 0);
             const clientName_val = document.getElementById('clientName').value || '[Client Name]';
             const venueName = document.getElementById('venueName').value || '[Venue Name]';
             const partiesText = `The service contract agreement is entered into on ${new Date().toLocaleDateString('en-GB')} by Adam Filims with an address of ${businessAddress} and with ${clientName_val} with an address of ${venueName}.`;
-            currentY = addText(partiesText, margin, currentY, pageWidth - 2 * margin, 10);
+            currentY = addText(partiesText, margin, currentY);
             currentY += 8;
 
-            // Consideration Section
-            checkPageBreak(25);
-            currentY = addText('Consideration', margin, currentY, pageWidth - 2 * margin, 12, [15, 40, 98], true);
-            currentY += 3;
+            // Consideration
+            pdf.setTextColor(15, 40, 98);
+            pdf.text('Consideration', margin, currentY);
+            currentY += 8;
             
+            pdf.setTextColor(0, 0, 0);
             const considerationText = 'The parties agree that the wedding company Adam Filims will provide the photography services attached hereunder whereas the client will in return provide compensation for service and expertise.';
-            currentY = addText(considerationText, margin, currentY, pageWidth - 2 * margin, 10);
+            currentY = addText(considerationText, margin, currentY);
             currentY += 8;
 
-            // Service Section
-            checkPageBreak(30);
-            currentY = addText('Service', margin, currentY, pageWidth - 2 * margin, 12, [15, 40, 98], true);
-            currentY += 3;
-            
-            currentY = addText('The consultant\'s services are summarised as follows:', margin, currentY, pageWidth - 2 * margin, 10);
+            // Service
+            pdf.setTextColor(15, 40, 98);
+            pdf.text('Service', margin, currentY);
             currentY += 8;
+            
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('The consultant\'s services are summarised as follows:', margin, currentY);
+            currentY += 10;
 
             // Service breakdown
             for (let i = 1; i <= eventDatesCount; i++) {
@@ -815,46 +732,50 @@
                 const droneService = document.getElementById(`droneService${i}`)?.value === 'yes';
 
                 if (candidPhotographers > 0 || traditionalPhotographers > 0 || candidVideographers > 0 || traditionalVideographers > 0 || droneService) {
-                    checkPageBreak(25);
+                    pdf.setTextColor(15, 40, 98);
+                    pdf.text(`📅 ${eventDate}`, margin, currentY);
+                    currentY += 6;
                     
-                    const formattedDate = eventDate ? new Date(eventDate).toLocaleDateString('en-GB') : '[Event Date]';
-                    currentY = addText(`📅 ${formattedDate}`, margin + 5, currentY, pageWidth - 2 * margin, 11, [15, 40, 98], true);
-                    currentY += 2;
-                    
+                    pdf.setTextColor(0, 0, 0);
                     if (candidPhotographers > 0) {
-                        currentY = addText(`📸 Candid Photographers: ${candidPhotographers}`, margin + 10, currentY, pageWidth - 2 * margin, 10);
+                        pdf.text(`📸 Candid Photographers: ${candidPhotographers}`, margin + 10, currentY);
+                        currentY += 5;
                     }
                     if (traditionalPhotographers > 0) {
-                        currentY = addText(`📷 Traditional Photographers: ${traditionalPhotographers}`, margin + 10, currentY, pageWidth - 2 * margin, 10);
+                        pdf.text(`📷 Traditional Photographers: ${traditionalPhotographers}`, margin + 10, currentY);
+                        currentY += 5;
                     }
                     if (candidVideographers > 0) {
-                        currentY = addText(`🎥 Candid Videographers: ${candidVideographers}`, margin + 10, currentY, pageWidth - 2 * margin, 10);
+                        pdf.text(`🎥 Candid Videographers: ${candidVideographers}`, margin + 10, currentY);
+                        currentY += 5;
                     }
                     if (traditionalVideographers > 0) {
-                        currentY = addText(`🎬 Traditional Videographers: ${traditionalVideographers}`, margin + 10, currentY, pageWidth - 2 * margin, 10);
+                        pdf.text(`🎬 Traditional Videographers: ${traditionalVideographers}`, margin + 10, currentY);
+                        currentY += 5;
                     }
                     if (droneService) {
-                        currentY = addText('🚁 Drone Service: Yes', margin + 10, currentY, pageWidth - 2 * margin, 10);
+                        pdf.text('🚁 Drone Service: Yes', margin + 10, currentY);
+                        currentY += 5;
                     }
                     currentY += 5;
                 }
             }
 
-            // Total Package Amount
-            checkPageBreak(25);
+            // Total Package
             const total = calculateTotal();
-            
-            // Draw background rectangle for total
+            currentY += 5;
             pdf.setFillColor(15, 40, 98);
-            pdf.rect(margin, currentY - 3, pageWidth - 2 * margin, 20, 'F');
+            pdf.rect(margin, currentY - 5, pageWidth - 2 * margin, 20, 'F');
             
-            currentY = addText('TOTAL PACKAGE AMOUNT', pageWidth / 2, currentY + 3, pageWidth - 2 * margin, 14, [255, 255, 255], true);
-            pdf.text('TOTAL PACKAGE AMOUNT', pageWidth / 2, currentY - 5, { align: 'center' });
+            pdf.setTextColor(255, 255, 255);
+            pdf.setFontSize(14);
+            pdf.text('TOTAL PACKAGE AMOUNT', pageWidth / 2, currentY + 5, { align: 'center' });
+            pdf.setFontSize(18);
+            pdf.text(`₹${total.toLocaleString('en-IN')}`, pageWidth / 2, currentY + 12, { align: 'center' });
             
-            currentY = addText(`₹${total.toLocaleString('en-IN')}`, pageWidth / 2, currentY + 2, pageWidth - 2 * margin, 16, [255, 255, 255], true);
-            pdf.text(`₹${total.toLocaleString('en-IN')}`, pageWidth / 2, currentY - 6, { align: 'center' });
-            
-            currentY += 10;
+            currentY += 25;
+            pdf.setTextColor(0, 0, 0);
+            pdf.setFontSize(12);
 
             // Payment Schedule
             const bookingAdvance = parseInt(document.getElementById('bookingAdvance').value) || 0;
@@ -863,45 +784,55 @@
             const finalPayment = parseInt(document.getElementById('finalPayment').value) || 0;
 
             if (bookingAdvance > 0 || preWeddingPayment > 0 || weddingDayPayment > 0 || finalPayment > 0) {
-                checkPageBreak(30);
-                currentY = addText('Payment Schedule:', margin, currentY, pageWidth - 2 * margin, 12, [15, 40, 98], true);
-                currentY += 3;
+                pdf.setTextColor(15, 40, 98);
+                pdf.text('Payment Schedule:', margin, currentY);
+                currentY += 8;
                 
+                pdf.setTextColor(0, 0, 0);
                 if (bookingAdvance > 0) {
-                    currentY = addText(`💰 Booking Advance: ₹${bookingAdvance.toLocaleString('en-IN')}`, margin + 5, currentY, pageWidth - 2 * margin, 10);
+                    pdf.text(`💰 Booking Advance: ₹${bookingAdvance.toLocaleString('en-IN')}`, margin, currentY);
+                    currentY += 6;
                 }
                 if (preWeddingPayment > 0) {
-                    currentY = addText(`💰 Pre-Wedding Payment: ₹${preWeddingPayment.toLocaleString('en-IN')}`, margin + 5, currentY, pageWidth - 2 * margin, 10);
+                    pdf.text(`💰 Pre-Wedding Payment: ₹${preWeddingPayment.toLocaleString('en-IN')}`, margin, currentY);
+                    currentY += 6;
                 }
                 if (weddingDayPayment > 0) {
-                    currentY = addText(`💰 Wedding Day Payment: ₹${weddingDayPayment.toLocaleString('en-IN')}`, margin + 5, currentY, pageWidth - 2 * margin, 10);
+                    pdf.text(`💰 Wedding Day Payment: ₹${weddingDayPayment.toLocaleString('en-IN')}`, margin, currentY);
+                    currentY += 6;
                 }
                 if (finalPayment > 0) {
-                    currentY = addText(`💰 Final Payment: ₹${finalPayment.toLocaleString('en-IN')}`, margin + 5, currentY, pageWidth - 2 * margin, 10);
+                    pdf.text(`💰 Final Payment: ₹${finalPayment.toLocaleString('en-IN')}`, margin, currentY);
+                    currentY += 6;
                 }
-                currentY += 8;
+                currentY += 5;
             }
 
-            // Delivery and contact info
-            checkPageBreak(20);
-            currentY = addText('All the output will be delivered within 30 days from after selecting photos.', margin, currentY, pageWidth - 2 * margin, 10, [0, 0, 0], true);
-            currentY += 5;
-            
-            currentY = addText('Thank you for doing business with us. If there is any issue or you require clarification please let me know.', margin, currentY, pageWidth - 2 * margin, 10);
-            currentY += 5;
-            
-            currentY = addText('Contact us: +91 8147956159 (Shadeed)', margin, currentY, pageWidth - 2 * margin, 10, [0, 0, 0], true);
+            // Check if we need a new page
+            if (currentY > pageHeight - 80) {
+                pdf.addPage();
+                currentY = margin;
+            }
+
+            // Delivery note
+            pdf.text('All the output will be delivered within 30 days from after selecting photos.', margin, currentY);
             currentY += 8;
             
-            currentY = addText('E. & O.E.', pageWidth / 2, currentY, pageWidth - 2 * margin, 10);
-            pdf.text('E. & O.E.', pageWidth / 2, currentY - 3, { align: 'center' });
+            pdf.text('Thank you for doing business with us. If there is any issue or you require clarification please let me know.', margin, currentY);
+            currentY += 8;
+            
+            pdf.text('Contact us: +91 8147956159 (Shadeed)', margin, currentY);
             currentY += 10;
+            
+            pdf.text('E. & O.E.', pageWidth / 2, currentY, { align: 'center' });
+            currentY += 15;
 
             // Terms & Conditions
-            checkPageBreak(50);
-            currentY = addText('TERMS AND CONDITIONS', margin, currentY, pageWidth - 2 * margin, 12, [15, 40, 98], true);
-            currentY += 5;
+            pdf.setTextColor(15, 40, 98);
+            pdf.text('TERMS AND CONDITIONS', margin, currentY);
+            currentY += 10;
             
+            pdf.setTextColor(0, 0, 0);
             const terms = [
                 '• Accommodation Extra',
                 '• In Case of extra print @ INR 600 will be charged per leaf both side (per leaf 12 photos)',
@@ -915,13 +846,15 @@
             ];
 
             terms.forEach(term => {
-                checkPageBreak(8);
-                currentY = addText(term, margin, currentY, pageWidth - 2 * margin, 9);
-                currentY += 1;
+                if (currentY > pageHeight - 20) {
+                    pdf.addPage();
+                    currentY = margin;
+                }
+                currentY = addText(term, margin, currentY);
+                currentY += 2;
             });
 
-            // Save the PDF
-            pdf.save(`${clientName}_Wedding_Contract_${new Date().toISOString().split('T')[0]}.pdf`);
+            pdf.save(`${clientName}_Wedding_Contract.pdf`);
         }
 
         function exportImage() {
@@ -931,13 +864,12 @@
                 scale: 2,
                 useCORS: true,
                 letterRendering: 1,
-                allowTaint: false,
-                backgroundColor: '#ffffff'
+                allowTaint: false
             }).then(canvas => {
                 const link = document.createElement('a');
                 const clientName = document.getElementById('clientName').value || 'Client';
-                link.download = `${clientName}_Wedding_Quotation_${new Date().toISOString().split('T')[0]}.png`;
-                link.href = canvas.toDataURL('image/png', 1.0);
+                link.download = `${clientName}_Wedding_Quotation.png`;
+                link.href = canvas.toDataURL();
                 link.click();
             });
         }
@@ -951,77 +883,24 @@
                     <head>
                         <title>Adam Filims - Wedding Quotation</title>
                         <style>
-                            @media print {
-                                body { 
-                                    font-family: Arial, sans-serif; 
-                                    margin: 0; 
-                                    padding: 20px;
-                                    font-size: 12px;
-                                }
-                                .quotation-preview { 
-                                    background: white !important; 
-                                    box-shadow: none !important;
-                                    padding: 0 !important;
-                                }
-                                .quotation-header { 
-                                    text-align: center; 
-                                    border-bottom: 2px solid #0f2862; 
-                                    padding-bottom: 20px; 
-                                    margin-bottom: 25px; 
-                                }
-                                .quotation-header h1 { 
-                                    color: #0f2862 !important; 
-                                    font-size: 24px !important; 
-                                    margin-bottom: 10px; 
-                                }
-                                .service-breakdown { 
-                                    background: #f8f9fa !important; 
-                                    padding: 15px; 
-                                    border-radius: 8px; 
-                                    margin: 15px 0; 
-                                    -webkit-print-color-adjust: exact;
-                                }
-                                .total-section { 
-                                    background: #0f2862 !important; 
-                                    color: white !important; 
-                                    padding: 20px; 
-                                    border-radius: 10px; 
-                                    text-align: center; 
-                                    margin: 20px 0; 
-                                    -webkit-print-color-adjust: exact;
-                                }
-                                .payment-schedule { 
-                                    background: #f0f4f8 !important; 
-                                    padding: 15px; 
-                                    border-radius: 8px; 
-                                    margin: 15px 0; 
-                                    -webkit-print-color-adjust: exact;
-                                }
-                                .terms { 
-                                    font-size: 11px; 
-                                    color: #666; 
-                                    border-top: 1px solid #ddd; 
-                                    padding-top: 15px; 
-                                    margin-top: 20px; 
-                                }
-                            }
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            .quotation-preview { background: white; }
+                            .quotation-header { text-align: center; border-bottom: 2px solid #0f2862; padding-bottom: 20px; margin-bottom: 25px; }
+                            .quotation-header h1 { color: #0f2862; font-size: 2rem; margin-bottom: 10px; }
+                            .service-breakdown { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; }
+                            .total-section { background: #0f2862; color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
+                            .payment-schedule { background: #f0f4f8; padding: 15px; border-radius: 8px; margin: 15px 0; }
+                            .terms { font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 15px; margin-top: 20px; }
                         </style>
                     </head>
                     <body>
                         <div class="quotation-preview">${quotationContent}</div>
-                        <script>
-                            window.onload = function() {
-                                window.print();
-                                window.onafterprint = function() {
-                                    window.close();
-                                }
-                            }
-                        </script>
                     </body>
                 </html>
             `);
             
             printWindow.document.close();
+            printWindow.print();
         }
     </script>
 </body>
