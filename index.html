@@ -115,7 +115,7 @@
             flex: 1;
         }
 
-        .service-item input {
+        .service-item input, .service-item select {
             width: 80px;
             margin-bottom: 0;
         }
@@ -272,12 +272,10 @@
             <p>☎ +91 8147956159 | 📷 @adam_filims</p>
         </div>
 
-        <!-- Admin Panel Toggle -->
         <div style="text-align: center; margin-bottom: 20px;">
             <button class="btn btn-secondary" onclick="toggleAdmin()">⚙ Admin Settings</button>
         </div>
 
-        <!-- Admin Panel -->
         <div id="adminPanel" class="admin-section hidden">
             <h3>Admin Settings</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
@@ -301,7 +299,6 @@
         </div>
 
         <div class="main-content">
-            <!-- Form Section -->
             <div class="form-section">
                 <h2>📋 Quotation Details</h2>
                 
@@ -325,14 +322,12 @@
                     <textarea id="additionalNotes" rows="3" placeholder="Any special requirements or notes" oninput="updatePreview()"></textarea>
                 </div>
 
-                <!-- Event Dates and Services -->
                 <div id="eventDates">
                     <h3 style="color: #0f2862; margin: 20px 0 15px 0;">📅 Event Dates & Services</h3>
                 </div>
 
                 <button class="btn" onclick="addDateService()">✚ Add Event Date</button>
 
-                <!-- Pricing Section -->
                 <div class="pricing-section">
                     <h3 style="color: #0f2862; margin-bottom: 15px;">💰 Pricing</h3>
                     
@@ -370,13 +365,11 @@
                 </div>
             </div>
 
-            <!-- Preview Section -->
             <div class="preview-section">
                 <h2>Quotation Preview</h2>
                 
                 <div id="quotationPreview" class="quotation-preview">
-                    <!-- Preview content will be generated here -->
-                </div>
+                    </div>
 
                 <div class="export-buttons">
                     <button class="btn" onclick="exportPDF()">📄 Download PDF</button>
@@ -387,7 +380,6 @@
         </div>
     </div>
 
-    <!-- Include jsPDF for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -434,7 +426,7 @@
             
             const dateServiceHTML = `
                 <div class="date-service-row" id="dateService${eventDatesCount}">
-                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                         <h4 style="color: #0f2862;">Event Day ${eventDatesCount}</h4>
                         ${eventDatesCount > 1 ? `<button class="btn btn-danger" onclick="removeDateService(${eventDatesCount})" style="margin-left: auto; padding: 5px 10px; font-size: 12px;">✕ Remove</button>` : ''}
                     </div>
@@ -533,7 +525,7 @@
             const contactNumber = document.getElementById('contactNumber').value || '[Contact Number]';
             const venueName = document.getElementById('venueName').value || '[Venue Name]';
             const additionalNotes = document.getElementById('additionalNotes').value || '';
-            const businessAddress = document.getElementById('businessAddress').value || 'Mangaluru, Karnataka';
+            const businessAddress = document.getElementById('businessAddress').value || 'Bangalore, Karnataka';
 
             const bookingAdvance = parseInt(document.getElementById('bookingAdvance').value) || 0;
             const preWeddingPayment = parseInt(document.getElementById('preWeddingPayment').value) || 0;
@@ -642,218 +634,30 @@
             const element = document.getElementById('quotationPreview');
             const clientName = document.getElementById('clientName').value || 'Client';
             
-            // Create PDF with proper content
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const pageWidth = 210;
-            const pageHeight = 297;
-            const margin = 20;
-            const lineHeight = 6;
-            let currentY = margin;
-
-            // Helper function to add text with word wrap
-            function addText(text, x, y, maxWidth = pageWidth - 2 * margin) {
-                const lines = pdf.splitTextToSize(text, maxWidth);
-                pdf.text(lines, x, y);
-                return y + (lines.length * lineHeight);
-            }
-
-            // Header
-            pdf.setFontSize(24);
-            pdf.setTextColor(15, 40, 98); // Adam Filims blue
-            pdf.text('ADAM FILIMS', pageWidth / 2, currentY, { align: 'center' });
-            
-            currentY += 8;
-            pdf.setFontSize(12);
-            pdf.setTextColor(0, 0, 0);
-            pdf.text('Professional Wedding Photography & Videography', pageWidth / 2, currentY, { align: 'center' });
-            
-            currentY += 6;
-            const businessAddress = document.getElementById('businessAddress').value || 'Bangalore, Karnataka';
-            pdf.text(`📞 +91 8147956159 | 📍 ${businessAddress}`, pageWidth / 2, currentY, { align: 'center' });
-            pdf.text('📷 Instagram: @adam_filims', pageWidth / 2, currentY + 6, { align: 'center' });
-            
-            currentY += 20;
-            
-            // Draw line
-            pdf.setDrawColor(15, 40, 98);
-            pdf.setLineWidth(0.5);
-            pdf.line(margin, currentY, pageWidth - margin, currentY);
-            currentY += 10;
-
-            // Title
-            pdf.setFontSize(16);
-            pdf.setTextColor(15, 40, 98);
-            pdf.text('SERVICE CONTRACT AGREEMENT', pageWidth / 2, currentY, { align: 'center' });
-            currentY += 15;
-
-            // Parties
-            pdf.setFontSize(12);
-            pdf.setTextColor(15, 40, 98);
-            pdf.text('Parties', margin, currentY);
-            currentY += 8;
-            
-            pdf.setTextColor(0, 0, 0);
-            const clientName_val = document.getElementById('clientName').value || '[Client Name]';
-            const venueName = document.getElementById('venueName').value || '[Venue Name]';
-            const partiesText = `The service contract agreement is entered into on ${new Date().toLocaleDateString('en-GB')} by Adam Filims with an address of ${businessAddress} and with ${clientName_val} with an address of ${venueName}.`;
-            currentY = addText(partiesText, margin, currentY);
-            currentY += 8;
-
-            // Consideration
-            pdf.setTextColor(15, 40, 98);
-            pdf.text('Consideration', margin, currentY);
-            currentY += 8;
-            
-            pdf.setTextColor(0, 0, 0);
-            const considerationText = 'The parties agree that the wedding company Adam Filims will provide the photography services attached hereunder whereas the client will in return provide compensation for service and expertise.';
-            currentY = addText(considerationText, margin, currentY);
-            currentY += 8;
-
-            // Service
-            pdf.setTextColor(15, 40, 98);
-            pdf.text('Service', margin, currentY);
-            currentY += 8;
-            
-            pdf.setTextColor(0, 0, 0);
-            pdf.text('The consultant\'s services are summarised as follows:', margin, currentY);
-            currentY += 10;
-
-            // Service breakdown
-            for (let i = 1; i <= eventDatesCount; i++) {
-                const dateElement = document.getElementById(`eventDate${i}`);
-                if (!dateElement) continue;
-
-                const eventDate = dateElement.value || '[Event Date]';
-                const candidPhotographers = parseInt(document.getElementById(`candidPhotographers${i}`)?.value) || 0;
-                const traditionalPhotographers = parseInt(document.getElementById(`traditionalPhotographers${i}`)?.value) || 0;
-                const candidVideographers = parseInt(document.getElementById(`candidVideographers${i}`)?.value) || 0;
-                const traditionalVideographers = parseInt(document.getElementById(`traditionalVideographers${i}`)?.value) || 0;
-                const droneService = document.getElementById(`droneService${i}`)?.value === 'yes';
-
-                if (candidPhotographers > 0 || traditionalPhotographers > 0 || candidVideographers > 0 || traditionalVideographers > 0 || droneService) {
-                    pdf.setTextColor(15, 40, 98);
-                    pdf.text(`📅 ${eventDate}`, margin, currentY);
-                    currentY += 6;
-                    
-                    pdf.setTextColor(0, 0, 0);
-                    if (candidPhotographers > 0) {
-                        pdf.text(`📸 Candid Photographers: ${candidPhotographers}`, margin + 10, currentY);
-                        currentY += 5;
-                    }
-                    if (traditionalPhotographers > 0) {
-                        pdf.text(`📷 Traditional Photographers: ${traditionalPhotographers}`, margin + 10, currentY);
-                        currentY += 5;
-                    }
-                    if (candidVideographers > 0) {
-                        pdf.text(`🎥 Candid Videographers: ${candidVideographers}`, margin + 10, currentY);
-                        currentY += 5;
-                    }
-                    if (traditionalVideographers > 0) {
-                        pdf.text(`🎬 Traditional Videographers: ${traditionalVideographers}`, margin + 10, currentY);
-                        currentY += 5;
-                    }
-                    if (droneService) {
-                        pdf.text('🚁 Drone Service: Yes', margin + 10, currentY);
-                        currentY += 5;
-                    }
-                    currentY += 5;
-                }
-            }
-
-            // Total Package
-            const total = calculateTotal();
-            currentY += 5;
-            pdf.setFillColor(15, 40, 98);
-            pdf.rect(margin, currentY - 5, pageWidth - 2 * margin, 20, 'F');
-            
-            pdf.setTextColor(255, 255, 255);
-            pdf.setFontSize(14);
-            pdf.text('TOTAL PACKAGE AMOUNT', pageWidth / 2, currentY + 5, { align: 'center' });
-            pdf.setFontSize(18);
-            pdf.text(`₹${total.toLocaleString('en-IN')}`, pageWidth / 2, currentY + 12, { align: 'center' });
-            
-            currentY += 25;
-            pdf.setTextColor(0, 0, 0);
-            pdf.setFontSize(12);
-
-            // Payment Schedule
-            const bookingAdvance = parseInt(document.getElementById('bookingAdvance').value) || 0;
-            const preWeddingPayment = parseInt(document.getElementById('preWeddingPayment').value) || 0;
-            const weddingDayPayment = parseInt(document.getElementById('weddingDayPayment').value) || 0;
-            const finalPayment = parseInt(document.getElementById('finalPayment').value) || 0;
-
-            if (bookingAdvance > 0 || preWeddingPayment > 0 || weddingDayPayment > 0 || finalPayment > 0) {
-                pdf.setTextColor(15, 40, 98);
-                pdf.text('Payment Schedule:', margin, currentY);
-                currentY += 8;
+            // html2canvas to capture the preview as an image
+            html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
                 
-                pdf.setTextColor(0, 0, 0);
-                if (bookingAdvance > 0) {
-                    pdf.text(`💰 Booking Advance: ₹${bookingAdvance.toLocaleString('en-IN')}`, margin, currentY);
-                    currentY += 6;
-                }
-                if (preWeddingPayment > 0) {
-                    pdf.text(`💰 Pre-Wedding Payment: ₹${preWeddingPayment.toLocaleString('en-IN')}`, margin, currentY);
-                    currentY += 6;
-                }
-                if (weddingDayPayment > 0) {
-                    pdf.text(`💰 Wedding Day Payment: ₹${weddingDayPayment.toLocaleString('en-IN')}`, margin, currentY);
-                    currentY += 6;
-                }
-                if (finalPayment > 0) {
-                    pdf.text(`💰 Final Payment: ₹${finalPayment.toLocaleString('en-IN')}`, margin, currentY);
-                    currentY += 6;
-                }
-                currentY += 5;
-            }
+                const imgWidth = canvas.width;
+                const imgHeight = canvas.height;
+                const ratio = imgHeight / imgWidth;
+                let newHeight = pdfWidth * ratio;
+                let currentY = 0;
 
-            // Check if we need a new page
-            if (currentY > pageHeight - 80) {
-                pdf.addPage();
-                currentY = margin;
-            }
-
-            // Delivery note
-            pdf.text('All the output will be delivered within 30 days from after selecting photos.', margin, currentY);
-            currentY += 8;
-            
-            pdf.text('Thank you for doing business with us. If there is any issue or you require clarification please let me know.', margin, currentY);
-            currentY += 8;
-            
-            pdf.text('Contact us: +91 8147956159 (Shadeed)', margin, currentY);
-            currentY += 10;
-            
-            pdf.text('E. & O.E.', pageWidth / 2, currentY, { align: 'center' });
-            currentY += 15;
-
-            // Terms & Conditions
-            pdf.setTextColor(15, 40, 98);
-            pdf.text('TERMS AND CONDITIONS', margin, currentY);
-            currentY += 10;
-            
-            pdf.setTextColor(0, 0, 0);
-            const terms = [
-                '• Accommodation Extra',
-                '• In Case of extra print @ INR 600 will be charged per leaf both side (per leaf 12 photos)',
-                '• 10% of package amount needs to pay as advance',
-                '• 80% needs to pay on the event date',
-                '• Balance Amount 10% needs to pay on the date of full work delivery',
-                '• All the output will be given within 30 days after selecting album',
-                '• Client is responsible for vendor meals during event',
-                '• Weather conditions may affect outdoor shoots',
-                '• Travel charges may apply for destinations beyond 50km'
-            ];
-
-            terms.forEach(term => {
-                if (currentY > pageHeight - 20) {
-                    pdf.addPage();
-                    currentY = margin;
+                // Handle pagination if content is longer than one page
+                while (currentY < newHeight) {
+                    pdf.addImage(imgData, 'PNG', 0, -currentY, pdfWidth, newHeight);
+                    currentY += pdfHeight;
+                    if (currentY < newHeight) {
+                        pdf.addPage();
+                    }
                 }
-                currentY = addText(term, margin, currentY);
-                currentY += 2;
+
+                pdf.save(`${clientName}_Wedding_Contract.pdf`);
             });
-
-            pdf.save(`${clientName}_Wedding_Contract.pdf`);
         }
 
         function exportImage() {
