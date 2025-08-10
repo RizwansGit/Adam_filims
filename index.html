@@ -1,6 +1,4 @@
-// Initialize with one date and set default pricing mode
-        document.addEventListener('DOMContentLoaded', function() {
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -397,9 +395,10 @@
         let eventDatesCount = 0;
         let pricingMode = 'auto';
 
-        // Initialize with one date
+        // Initialize with one date and set default pricing mode
         document.addEventListener('DOMContentLoaded', function() {
             loadSettings();
+            setPricingMode('auto'); // Set auto as default
             addDateService();
             updatePreview();
         });
