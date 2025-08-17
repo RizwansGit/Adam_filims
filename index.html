@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adam Filims - Quotation Maker</title>
+    <title>Adam Films - Wedding Quotation Maker</title>
     <style>
         * {
             margin: 0;
@@ -12,10 +12,10 @@
         }
 
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #091f36 0%, #0f2862 100%);
+            background: linear-gradient(135deg, #0c1821 0%, #1e3a5f 50%, #0f2027 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            color: #333;
         }
 
         .container {
@@ -26,685 +26,599 @@
 
         .header {
             text-align: center;
-            color: white;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            padding: 40px 0;
         }
 
-        .header h1 {
+        .logo {
             font-size: 2.5rem;
             font-weight: bold;
+            color: #ffffff;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+        .tagline {
+            font-size: 1.2rem;
+            color: #b0bec5;
+            margin-bottom: 30px;
         }
 
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 30px;
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        .form-section, .preview-section {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .form-section {
+            margin-bottom: 30px;
         }
 
-        .form-section h2, .preview-section h2 {
-            color: #0f2862;
-            margin-bottom: 25px;
+        .section-title {
             font-size: 1.5rem;
-            border-bottom: 2px solid #0f2862;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ff6b6b;
             padding-bottom: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .form-group {
             margin-bottom: 20px;
         }
 
-        .form-group label {
+        label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #091f36;
+            color: #e0e0e0;
+            font-weight: 500;
         }
 
-        .form-group input, .form-group select, .form-group textarea {
+        input, textarea, select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        input:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: #0f2862;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
         }
 
-        .date-service-row {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border-left: 4px solid #0f2862;
-        }
-
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+        input::placeholder, textarea::placeholder {
+            color: #b0bec5;
         }
 
         .service-item {
-            display: flex;
-            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .service-day {
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 10px;
-        }
-
-        .service-item label {
-            margin-bottom: 0;
-            flex: 1;
-        }
-
-        .service-item input, .service-item select {
-            width: 80px;
-            margin-bottom: 0;
         }
 
         .btn {
-            background: #0f2862;
+            background: linear-gradient(45deg, #ff6b6b, #ff5252);
             color: white;
-            padding: 12px 24px;
+            padding: 15px 30px;
             border: none;
-            border-radius: 8px;
+            border-radius: 50px;
             cursor: pointer;
             font-size: 16px;
-            transition: background 0.3s;
-            margin: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
 
         .btn:hover {
-            background: #091f36;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
         }
 
         .btn-secondary {
-            background: #4f5f76;
-        }
-
-        .btn-secondary:hover {
-            background: #3a4456;
-        }
-
-        .btn-danger {
-            background: #9e363a;
-        }
-
-        .btn-danger:hover {
-            background: #7a2b2e;
-        }
-
-        .pricing-section {
-            background: #f0f4f8;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .pricing-toggle {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            background: linear-gradient(45deg, #546e7a, #37474f);
         }
 
         .quotation-preview {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            font-size: 14px;
+            background: #ffffff;
+            color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 30px;
+            font-family: 'Times New Roman', serif;
             line-height: 1.6;
-            page-break-inside: avoid;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .quotation-header {
             text-align: center;
-            border-bottom: 2px solid #0f2862;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #333;
             padding-bottom: 20px;
-            margin-bottom: 25px;
-            page-break-after: avoid;
         }
 
-        .quotation-header h1 {
-            color: #0f2862;
-            font-size: 2rem;
+        .company-name {
+            font-size: 28px;
+            font-weight: bold;
             margin-bottom: 10px;
+            color: #2c3e50;
         }
 
-        .quotation-content {
+        .contract-title {
+            font-size: 20px;
+            color: #34495e;
+        }
+
+        .contract-section {
             margin-bottom: 25px;
         }
 
-        .service-breakdown {
+        .section-heading {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-decoration: underline;
+        }
+
+        .service-details {
             background: #f8f9fa;
             padding: 15px;
             border-radius: 8px;
-            margin: 15px 0;
-            page-break-inside: avoid;
+            margin: 10px 0;
         }
 
-        .total-section {
-            background: #0f2862;
-            color: white;
+        .amount-section {
+            background: #e8f5e8;
             padding: 20px;
             border-radius: 10px;
-            text-align: center;
-            margin: 20px 0;
-            page-break-inside: avoid;
+            border: 2px solid #27ae60;
         }
 
-        .payment-schedule {
-            background: #f0f4f8;
+        .terms-section {
+            background: #fff3cd;
             padding: 15px;
             border-radius: 8px;
-            margin: 15px 0;
-            page-break-inside: avoid;
-        }
-
-        .terms {
-            font-size: 12px;
-            color: #666;
-            border-top: 1px solid #ddd;
-            padding-top: 15px;
-            margin-top: 20px;
-            page-break-inside: avoid;
-        }
-
-        .export-buttons {
-            text-align: center;
-            margin-top: 20px;
-            gap: 10px;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .form-section, .preview-section {
-                padding: 20px;
-            }
-        }
-
-        .admin-section {
-            background: #fff3cd;
             border: 1px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
+            margin-top: 20px;
         }
 
         .hidden {
             display: none;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>ADAM FILIMS</h1>
-            <p>Professional Wedding Photography & Videography</p>
-            <p>☎ +91 8147956159 | 📷 @adam_filims</p>
+            <div class="logo">ADAM FILMS</div>
+            <div class="tagline">Bringing Stories to Life, One Frame at a Time</div>
         </div>
 
-        <div style="text-align: center; margin-bottom: 20px;">
-            <button class="btn btn-secondary" onclick="toggleAdmin()">⚙ Admin Settings</button>
-        </div>
-
-        <div id="adminPanel" class="admin-section hidden">
-            <h3>Admin Settings</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                <div class="form-group">
-                    <label>Photographer Rate (per day):</label>
-                    <input type="number" id="photographerRate" value="5000" onchange="saveSettings()">
-                </div>
-                <div class="form-group">
-                    <label>Videographer Rate (per day):</label>
-                    <input type="number" id="videographerRate" value="7000" onchange="saveSettings()">
-                </div>
-                <div class="form-group">
-                    <label>Drone Rate (per event):</label>
-                    <input type="number" id="droneRate" value="15000" onchange="saveSettings()">
-                </div>
-                <div class="form-group">
-                    <label>Business Address:</label>
-                    <input type="text" id="businessAddress" value="Bangalore, Karnataka" onchange="saveSettings()">
-                </div>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <div class="form-section">
-                <h2>📋 Quotation Details</h2>
-                
-                <div class="form-group">
-                    <label>Client Name:</label>
-                    <input type="text" id="clientName" placeholder="Enter client name" oninput="updatePreview()">
-                </div>
-
-                <div class="form-group">
-                    <label>Contact Number:</label>
-                    <input type="tel" id="contactNumber" placeholder="Enter contact number" oninput="updatePreview()">
-                </div>
-
-                <div class="form-group">
-                    <label>Venue Name:</label>
-                    <input type="text" id="venueName" placeholder="Enter venue name" oninput="updatePreview()">
-                </div>
-
-                <div class="form-group">
-                    <label>Additional Notes:</label>
-                    <textarea id="additionalNotes" rows="3" placeholder="Any special requirements or notes" oninput="updatePreview()"></textarea>
-                </div>
-
-                <div id="eventDates">
-                    <h3 style="color: #0f2862; margin: 20px 0 15px 0;">📅 Event Dates & Services</h3>
-                </div>
-
-                <button class="btn" onclick="addDateService()">✚ Add Event Date</button>
-
-                <div class="pricing-section">
-                    <h3 style="color: #0f2862; margin-bottom: 15px;">💰 Pricing</h3>
-                    
-                    <div class="pricing-toggle">
-                        <button class="btn" id="autoBtn" onclick="setPricingMode('auto')">Auto Calculate</button>
-                        <button class="btn btn-secondary" id="fixedBtn" onclick="setPricingMode('fixed')">Fixed Package</button>
-                    </div>
-
-                    <div id="fixedPricing" class="hidden">
+        <div class="form-container">
+            <form id="quotationForm">
+                <!-- Client Information -->
+                <div class="form-section">
+                    <h2 class="section-title">Client Information</h2>
+                    <div class="form-grid">
                         <div class="form-group">
-                            <label>Package Amount (₹):</label>
-                            <input type="number" id="fixedAmount" placeholder="Enter package amount" oninput="updatePreview()">
+                            <label for="clientName">Client Name:</label>
+                            <input type="text" id="clientName" name="clientName" placeholder="Enter client name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientAddress">Client Address:</label>
+                            <input type="text" id="clientAddress" name="clientAddress" placeholder="Enter client address">
+                        </div>
+                        <div class="form-group">
+                            <label for="contractDate">Contract Date:</label>
+                            <input type="date" id="contractDate" name="contractDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="companyAddress">Company Address:</label>
+                            <input type="text" id="companyAddress" name="companyAddress" placeholder="Enter company address">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wedding Dates and Services -->
+                <div class="form-section">
+                    <h2 class="section-title">Wedding Services</h2>
+                    
+                    <div class="service-item">
+                        <div class="service-day">Day 1 Services:</div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="day1Date">Date:</label>
+                                <input type="date" id="day1Date" name="day1Date">
+                            </div>
+                            <div class="form-group">
+                                <label for="day1CandidPhoto">Candid Photographers:</label>
+                                <input type="number" id="day1CandidPhoto" name="day1CandidPhoto" min="0" value="2">
+                            </div>
+                            <div class="form-group">
+                                <label for="day1TradPhoto">Traditional Photographers:</label>
+                                <input type="number" id="day1TradPhoto" name="day1TradPhoto" min="0" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="day1CandidVideo">Candid Videographers:</label>
+                                <input type="number" id="day1CandidVideo" name="day1CandidVideo" min="0" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="day1TradVideo">Traditional Videographers:</label>
+                                <input type="number" id="day1TradVideo" name="day1TradVideo" min="0" value="1">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Booking Advance (₹):</label>
-                        <input type="number" id="bookingAdvance" placeholder="Enter advance amount" oninput="updatePreview()">
+                    <div class="service-item">
+                        <div class="service-day">Day 2 Services:</div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="day2Date">Date:</label>
+                                <input type="date" id="day2Date" name="day2Date">
+                            </div>
+                            <div class="form-group">
+                                <label for="day2CandidPhoto">Candid Photographers:</label>
+                                <input type="number" id="day2CandidPhoto" name="day2CandidPhoto" min="0" value="2">
+                            </div>
+                            <div class="form-group">
+                                <label for="day2TradPhoto">Traditional Photographers:</label>
+                                <input type="number" id="day2TradPhoto" name="day2TradPhoto" min="0" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="day2CandidVideo">Candid Videographers:</label>
+                                <input type="number" id="day2CandidVideo" name="day2CandidVideo" min="0" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="day2TradVideo">Traditional Videographers:</label>
+                                <input type="number" id="day2TradVideo" name="day2TradVideo" min="0" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="day2Drone">Drone Operator:</label>
+                                <input type="number" id="day2Drone" name="day2Drone" min="0" value="1">
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Pre-Wedding Payment (₹):</label>
-                        <input type="number" id="preWeddingPayment" placeholder="Enter pre-wedding payment" oninput="updatePreview()">
+                    <div class="service-item">
+                        <div class="service-day">Day 3 Services:</div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="day3Date">Date:</label>
+                                <input type="date" id="day3Date" name="day3Date">
+                            </div>
+                            <div class="form-group">
+                                <label for="day3CandidPhoto">Candid Photographers:</label>
+                                <input type="number" id="day3CandidPhoto" name="day3CandidPhoto" min="0" value="2">
+                            </div>
+                            <div class="form-group">
+                                <label for="day3TradPhoto">Traditional Photographers:</label>
+                                <input type="number" id="day3TradPhoto" name="day3TradPhoto" min="0" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="day3CandidVideo">Candid Videographers:</label>
+                                <input type="number" id="day3CandidVideo" name="day3CandidVideo" min="0" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="day3TradVideo">Traditional Videographers:</label>
+                                <input type="number" id="day3TradVideo" name="day3TradVideo" min="0" value="1">
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Wedding Day Payment (₹):</label>
-                        <input type="number" id="weddingDayPayment" placeholder="Enter wedding day payment" oninput="updatePreview()">
+                    <div class="service-item">
+                        <div class="service-day">Paat Bidai Services:</div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="bidaiPhoto">Photographers:</label>
+                                <input type="number" id="bidaiPhoto" name="bidaiPhoto" min="0" value="2">
+                            </div>
+                            <div class="form-group">
+                                <label for="bidaiVideo">Videographers:</label>
+                                <input type="number" id="bidaiVideo" name="bidaiVideo" min="0" value="2">
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Final Payment (₹):</label>
-                        <input type="number" id="finalPayment" placeholder="Enter final payment" oninput="updatePreview()">
+                    <div class="service-item">
+                        <div class="service-day">Pre-Wedding Services:</div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="preWeddingPhoto">Photographers:</label>
+                                <input type="number" id="preWeddingPhoto" name="preWeddingPhoto" min="0" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="preWeddingOutfits">Number of Outfits:</label>
+                                <input type="number" id="preWeddingOutfits" name="preWeddingOutfits" min="0" value="2">
+                            </div>
+                            <div class="form-group">
+                                <label for="designedPictures">Designed Pictures:</label>
+                                <input type="number" id="designedPictures" name="designedPictures" min="0" value="30">
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="preview-section">
-                <h2>Quotation Preview</h2>
-                
-                <div id="quotationPreview" class="quotation-preview">
+                <!-- Package Details -->
+                <div class="form-section">
+                    <h2 class="section-title">Package Details</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="totalAmount">Total Package Amount (₹):</label>
+                            <input type="number" id="totalAmount" name="totalAmount" placeholder="320000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookingAdvance">Booking Advance (₹):</label>
+                            <input type="number" id="bookingAdvance" name="bookingAdvance" placeholder="40000">
+                        </div>
+                        <div class="form-group">
+                            <label for="preWeddingAmount">Pre-Wedding Payment (₹):</label>
+                            <input type="number" id="preWeddingAmount" name="preWeddingAmount" placeholder="20000">
+                        </div>
+                        <div class="form-group">
+                            <label for="weddingDayAmount">Wedding Day Payment (₹):</label>
+                            <input type="number" id="weddingDayAmount" name="weddingDayAmount" placeholder="230000">
+                        </div>
+                        <div class="form-group">
+                            <label for="finalAmount">Balance Amount (₹):</label>
+                            <input type="number" id="finalAmount" name="finalAmount" placeholder="30000">
+                        </div>
+                        <div class="form-group">
+                            <label for="editedPictures">Edited Pictures:</label>
+                            <input type="number" id="editedPictures" name="editedPictures" value="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="frames">Number of Frames:</label>
+                            <input type="number" id="frames" name="frames" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="albums">Number of Albums:</label>
+                            <input type="number" id="albums" name="albums" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="albumPages">Pages per Album:</label>
+                            <input type="number" id="albumPages" name="albumPages" value="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactNumber">Contact Number:</label>
+                            <input type="tel" id="contactNumber" name="contactNumber" placeholder="+91 8147956159">
+                        </div>
                     </div>
-
-                <div class="export-buttons">
-                    <button class="btn" onclick="exportPDF()">📄 Download PDF</button>
-                    <button class="btn btn-secondary" onclick="exportImage()">🖼 Save as Image</button>
-                    <button class="btn btn-secondary" onclick="printQuotation()">🖨 Print</button>
                 </div>
-            </div>
+
+                <div style="text-align: center;">
+                    <button type="button" class="btn" onclick="generateQuotation()">Generate Quotation</button>
+                    <button type="button" class="btn btn-secondary" onclick="printQuotation()">Print Quotation</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="quotationOutput" class="quotation-preview hidden">
+            <!-- Generated quotation will appear here -->
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <script>
-        let eventDatesCount = 0;
-        let pricingMode = 'auto';
-
-        // Initialize with one date and set default pricing mode
-        document.addEventListener('DOMContentLoaded', function() {
-            loadSettings();
-            setPricingMode('auto'); // Set auto as default
-            addDateService();
-            updatePreview();
-        });
-
-        function loadSettings() {
-            const photographerRate = localStorage.getItem('photographerRate') || '5000';
-            const videographerRate = localStorage.getItem('videographerRate') || '7000';
-            const droneRate = localStorage.getItem('droneRate') || '15000';
-            const businessAddress = localStorage.getItem('businessAddress') || 'Bangalore, Karnataka';
-
-            document.getElementById('photographerRate').value = photographerRate;
-            document.getElementById('videographerRate').value = videographerRate;
-            document.getElementById('droneRate').value = droneRate;
-            document.getElementById('businessAddress').value = businessAddress;
-        }
-
-        function saveSettings() {
-            localStorage.setItem('photographerRate', document.getElementById('photographerRate').value);
-            localStorage.setItem('videographerRate', document.getElementById('videographerRate').value);
-            localStorage.setItem('droneRate', document.getElementById('droneRate').value);
-            localStorage.setItem('businessAddress', document.getElementById('businessAddress').value);
-            updatePreview();
-        }
-
-        function toggleAdmin() {
-            const panel = document.getElementById('adminPanel');
-            panel.classList.toggle('hidden');
-        }
-
-        function addDateService() {
-            eventDatesCount++;
-            const eventDatesDiv = document.getElementById('eventDates');
+        function generateQuotation() {
+            const form = document.getElementById('quotationForm');
+            const formData = new FormData(form);
             
-            const dateServiceHTML = `
-                <div class="date-service-row" id="dateService${eventDatesCount}">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h4 style="color: #0f2862;">Event Day ${eventDatesCount}</h4>
-                        ${eventDatesCount > 1 ? `<button class="btn btn-danger" onclick="removeDateService(${eventDatesCount})" style="margin-left: auto; padding: 5px 10px; font-size: 12px;">✕ Remove</button>` : ''}
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Event Date:</label>
-                        <input type="date" id="eventDate${eventDatesCount}" oninput="updatePreview()">
-                    </div>
-
-                    <div class="service-grid">
-                        <div class="service-item">
-                            <label>Candid Photographers:</label>
-                            <input type="number" id="candidPhotographers${eventDatesCount}" min="0" max="5" value="0" oninput="updatePreview()">
-                        </div>
-                        <div class="service-item">
-                            <label>Traditional Photographers:</label>
-                            <input type="number" id="traditionalPhotographers${eventDatesCount}" min="0" max="5" value="0" oninput="updatePreview()">
-                        </div>
-                        <div class="service-item">
-                            <label>Candid Videographers:</label>
-                            <input type="number" id="candidVideographers${eventDatesCount}" min="0" max="5" value="0" oninput="updatePreview()">
-                        </div>
-                        <div class="service-item">
-                            <label>Traditional Videographers:</label>
-                            <input type="number" id="traditionalVideographers${eventDatesCount}" min="0" max="5" value="0" oninput="updatePreview()">
-                        </div>
-                        <div class="service-item">
-                            <label>Drone Service:</label>
-                            <select id="droneService${eventDatesCount}" onchange="updatePreview()">
-                                <option value="no">No</option>
-                                <option value="yes">Yes</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            eventDatesDiv.insertAdjacentHTML('beforeend', dateServiceHTML);
-            updatePreview();
-        }
-
-        function removeDateService(id) {
-            document.getElementById(`dateService${id}`).remove();
-            updatePreview();
-        }
-
-        function setPricingMode(mode) {
-            pricingMode = mode;
-            const autoBtn = document.getElementById('autoBtn');
-            const fixedBtn = document.getElementById('fixedBtn');
-            const fixedPricing = document.getElementById('fixedPricing');
-
-            if (mode === 'auto') {
-                autoBtn.className = 'btn';
-                fixedBtn.className = 'btn btn-secondary';
-                fixedPricing.classList.add('hidden');
-            } else {
-                autoBtn.className = 'btn btn-secondary';
-                fixedBtn.className = 'btn';
-                fixedPricing.classList.remove('hidden');
-            }
-            updatePreview();
-        }
-
-        function calculateTotal() {
-            if (pricingMode === 'fixed') {
-                return parseInt(document.getElementById('fixedAmount').value) || 0;
-            }
-
-            let total = 0;
-            const photographerRate = parseInt(document.getElementById('photographerRate').value) || 5000;
-            const videographerRate = parseInt(document.getElementById('videographerRate').value) || 7000;
-            const droneRate = parseInt(document.getElementById('droneRate').value) || 15000;
-
-            // Calculate for each event date
-            for (let i = 1; i <= eventDatesCount; i++) {
-                const dateElement = document.getElementById(`eventDate${i}`);
-                if (!dateElement) continue;
-
-                const candidPhotographers = parseInt(document.getElementById(`candidPhotographers${i}`)?.value) || 0;
-                const traditionalPhotographers = parseInt(document.getElementById(`traditionalPhotographers${i}`)?.value) || 0;
-                const candidVideographers = parseInt(document.getElementById(`candidVideographers${i}`)?.value) || 0;
-                const traditionalVideographers = parseInt(document.getElementById(`traditionalVideographers${i}`)?.value) || 0;
-                const droneService = document.getElementById(`droneService${i}`)?.value === 'yes';
-
-                total += (candidPhotographers + traditionalPhotographers) * photographerRate;
-                total += (candidVideographers + traditionalVideographers) * videographerRate;
-                if (droneService) total += droneRate;
-            }
-
-            return total;
-        }
-
-        function updatePreview() {
-            const clientName = document.getElementById('clientName').value || '[Client Name]';
-            const contactNumber = document.getElementById('contactNumber').value || '[Contact Number]';
-            const venueName = document.getElementById('venueName').value || '[Venue Name]';
-            const additionalNotes = document.getElementById('additionalNotes').value || '';
-            const businessAddress = document.getElementById('businessAddress').value || 'Bangalore, Karnataka';
-
-            const bookingAdvance = parseInt(document.getElementById('bookingAdvance').value) || 0;
-            const preWeddingPayment = parseInt(document.getElementById('preWeddingPayment').value) || 0;
-            const weddingDayPayment = parseInt(document.getElementById('weddingDayPayment').value) || 0;
-            const finalPayment = parseInt(document.getElementById('finalPayment').value) || 0;
-
-            const total = calculateTotal();
-
-            let servicesHTML = '';
-            for (let i = 1; i <= eventDatesCount; i++) {
-                const dateElement = document.getElementById(`eventDate${i}`);
-                if (!dateElement) continue;
-
-                const eventDate = dateElement.value || '[Event Date]';
-                const candidPhotographers = parseInt(document.getElementById(`candidPhotographers${i}`)?.value) || 0;
-                const traditionalPhotographers = parseInt(document.getElementById(`traditionalPhotographers${i}`)?.value) || 0;
-                const candidVideographers = parseInt(document.getElementById(`candidVideographers${i}`)?.value) || 0;
-                const traditionalVideographers = parseInt(document.getElementById(`traditionalVideographers${i}`)?.value) || 0;
-                const droneService = document.getElementById(`droneService${i}`)?.value === 'yes';
-
-                if (candidPhotographers > 0 || traditionalPhotographers > 0 || candidVideographers > 0 || traditionalVideographers > 0 || droneService) {
-                    servicesHTML += `
-                        <div class="service-breakdown">
-                            <h4>📅 ${eventDate}</h4>
-                            ${candidPhotographers > 0 ? `<p>📸 Candid Photographers: ${candidPhotographers}</p>` : ''}
-                            ${traditionalPhotographers > 0 ? `<p>📷 Traditional Photographers: ${traditionalPhotographers}</p>` : ''}
-                            ${candidVideographers > 0 ? `<p>🎥 Candid Videographers: ${candidVideographers}</p>` : ''}
-                            ${traditionalVideographers > 0 ? `<p>🎬 Traditional Videographers: ${traditionalVideographers}</p>` : ''}
-                            ${droneService ? `<p>🚁 Drone Service: Yes</p>` : ''}
-                        </div>
-                    `;
-                }
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
             }
 
             const quotationHTML = `
                 <div class="quotation-header">
-                    <h1>ADAM FILIMS</h1>
-                    <p><strong>Professional Wedding Photography & Videography</strong></p>
-                    <p>☎ +91 8147956159</p>
-                    <p>📍 ${businessAddress}</p>
-                    <p>📷 Instagram: @adam_filims</p>
+                    <div class="company-name">Adam Films</div>
+                    <div class="contract-title">Wedding Photography Contract</div>
                 </div>
 
-                <div class="quotation-content">
-                    <h3 style="color: #0f2862; margin-bottom: 15px;">SERVICE CONTRACT AGREEMENT</h3>
+                <div class="contract-section">
+                    <div class="section-heading">Parties</div>
+                    <p>The service contract agreement is entered into on ${formatDate(data.contractDate)} by Adam Films with an address of ${data.companyAddress || 'Mangaluru'} and ${data.clientName} with an address of ${data.clientAddress}</p>
+                </div>
+
+                <div class="contract-section">
+                    <div class="section-heading">Consideration</div>
+                    <p>The parties agree that the wedding company Adam Films will provide the photography services attached hereunder whereas the client will in return provide compensation for service and expertise.</p>
+                </div>
+
+                <div class="contract-section">
+                    <div class="section-heading">Service</div>
+                    <p>The consultant's services are summarised as follows:</p>
                     
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="color: #0f2862;">Parties</h4>
-                        <p>The service contract agreement is entered into on <strong>${new Date().toLocaleDateString('en-GB')}</strong> by <strong>Adam Filims</strong> with an address of <strong>${businessAddress}</strong> and with <strong>${clientName}</strong> with an address of <strong>${venueName}</strong>.</p>
+                    ${generateServiceDetails(data)}
+                </div>
+
+                <div class="contract-section">
+                    <div class="section-heading">Output Details</div>
+                    <div class="service-details">
+                        <strong>Video:</strong><br>
+                        1. Wedding teaser 1 Minute (Full HD)<br>
+                        2. Wedding Film 5 minutes max (Full HD)<br>
+                        3. 2 Reels<br>
+                        4. Traditional video depending on event<br><br>
+                        
+                        <strong>Photo:</strong><br>
+                        ${data.editedPictures || '100'} Edited Pictures<br>
+                        ${data.frames || '2'} Frames<br>
+                        ${data.albumPages || '100'} +${data.albumPages || '100'} page ${data.albums || '2'} album for bride and groom<br>
+                        Each album ${Math.floor((data.albumPages || 100) * 2)} picture approximately
                     </div>
+                </div>
 
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="color: #0f2862;">Consideration</h4>
-                        <p>The parties agree that the wedding company Adam Filims will provide the photography services attached hereunder whereas the client will in return provide compensation for service and expertise.</p>
-                    </div>
+                <div class="amount-section">
+                    <div class="section-heading">Package Amount: ₹${formatNumber(data.totalAmount)}</div>
+                    <p>Booking advance need to pay ₹${formatNumber(data.bookingAdvance || 40000)}</p>
+                    <p>Pre wedding day need to pay ₹${formatNumber(data.preWeddingAmount || 20000)}</p>
+                    <p>Wedding day need to pay ₹${formatNumber(data.weddingDayAmount || 230000)}</p>
+                    <p>Before printing album need to pay balance ₹${formatNumber(data.finalAmount || 30000)}</p>
+                </div>
 
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="color: #0f2862;">Service</h4>
-                        <p>The consultant's services are summarised as follows:</p>
-                        ${servicesHTML || '<p>No services selected yet</p>'}
-                    </div>
+                <div class="contract-section">
+                    <p><strong>We required accommodation and transportation</strong></p>
+                    <p>Output above will be delivered within 30 days from after selecting photos.</p>
+                    <p>Thank you for doing business with us. If there is any issue or you require clarification please let me know.</p>
+                    <p><strong>Contact us: ${data.contactNumber || '+91 8147956159'} (Shadeed)</strong></p>
+                    <p><strong>E. & O.E.</strong></p>
+                </div>
 
-                    <div class="total-section">
-                        <h3>TOTAL PACKAGE AMOUNT</h3>
-                        <h2>₹${total.toLocaleString('en-IN')}</h2>
-                    </div>
-
-                    ${(bookingAdvance > 0 || preWeddingPayment > 0 || weddingDayPayment > 0 || finalPayment > 0) ? `
-                        <div class="payment-schedule">
-                            <h4 style="color: #0f2862;">Payment Schedule:</h4>
-                            ${bookingAdvance > 0 ? `<p>💰 Booking Advance: ₹${bookingAdvance.toLocaleString('en-IN')}</p>` : ''}
-                            ${preWeddingPayment > 0 ? `<p>💰 Pre-Wedding Payment: ₹${preWeddingPayment.toLocaleString('en-IN')}</p>` : ''}
-                            ${weddingDayPayment > 0 ? `<p>💰 Wedding Day Payment: ₹${weddingDayPayment.toLocaleString('en-IN')}</p>` : ''}
-                            ${finalPayment > 0 ? `<p>💰 Final Payment: ₹${finalPayment.toLocaleString('en-IN')}</p>` : ''}
-                        </div>
-                    ` : ''}
-
-                    <p style="margin: 20px 0;"><strong>All the output will be delivered within 30 days from after selecting photos.</strong></p>
-                    
-                    <p style="margin: 20px 0;">Thank you for doing business with us. If there is any issue or you require clarification please let me know.</p>
-                    
-                    <p style="margin: 20px 0;"><strong>Contact us:</strong> +91 8147956159 (Shadeed)</p>
-                    
-                    <p style="margin: 20px 0; text-align: center;"><strong>E. & O.E.</strong></p>
-
-                    <div class="terms">
-                        <h4 style="color: #0f2862;">TERMS AND CONDITIONS</h4>
-                        <p><strong>• Accommodation Extra</strong></p>
-                        <p>• In Case of extra print @ INR 600 will be charged per leaf both side (per leaf 12 photos)</p>
-                        <p>• 10% of package amount needs to pay as advance</p>
-                        <p>• 80% needs to pay on the event date</p>
-                        <p>• Balance Amount 10% needs to pay on the date of full work delivery</p>
-                        <p>• All the output will be given within 30 days after selecting album</p>
-                        <p>• Client is responsible for vendor meals during event</p>
-                        <p>• Weather conditions may affect outdoor shoots</p>
-                        <p>• Travel charges may apply for destinations beyond 50km</p>
-                    </div>
+                <div class="terms-section">
+                    <div class="section-heading">TERMS AND CONDITIONS</div>
+                    <p>• Accommodation Extra</p>
+                    <p>• In Case of extra print @ INR600 will be charged per leaf both side (per leaf 12photos)</p>
+                    <p>• 10% of package amount needs to pay as advance</p>
+                    <p>• 80% needs to pay the event date</p>
+                    <p>• Balance Amount 10% needs to pay on the date of full work delivery</p>
+                    <p>• All the output will be given within 30 days after selecting album</p>
                 </div>
             `;
 
-            document.getElementById('quotationPreview').innerHTML = quotationHTML;
+            document.getElementById('quotationOutput').innerHTML = quotationHTML;
+            document.getElementById('quotationOutput').classList.remove('hidden');
+            document.getElementById('quotationOutput').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function exportPDF() {
-            const { jsPDF } = window.jspdf;
-            const element = document.getElementById('quotationPreview');
-            const clientName = document.getElementById('clientName').value || 'Client';
-            
-            // html2canvas to capture the preview as an image
-            html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = pdf.internal.pageSize.getHeight();
-                
-                const imgWidth = canvas.width;
-                const imgHeight = canvas.height;
-                const ratio = imgHeight / imgWidth;
-                let newHeight = pdfWidth * ratio;
-                let currentY = 0;
+        function generateServiceDetails(data) {
+            let serviceHTML = '';
 
-                // Handle pagination if content is longer than one page
-                while (currentY < newHeight) {
-                    pdf.addImage(imgData, 'PNG', 0, -currentY, pdfWidth, newHeight);
-                    currentY += pdfHeight;
-                    if (currentY < newHeight) {
-                        pdf.addPage();
-                    }
-                }
+            // Day 1
+            if (data.day1Date) {
+                serviceHTML += `<div class="service-details">
+                    <strong>${formatDate(data.day1Date)}</strong><br>
+                    ${data.day1CandidPhoto || 0} photographer (candid)<br>
+                    ${data.day1TradPhoto || 0} photographer (traditional)<br>
+                    ${data.day1CandidVideo || 0} videographer (candid)<br>
+                    ${data.day1TradVideo || 0} videographer (traditional)
+                </div>`;
+            }
 
-                pdf.save(`${clientName}_Wedding_Contract.pdf`);
-            });
+            // Day 2
+            if (data.day2Date) {
+                serviceHTML += `<div class="service-details">
+                    <strong>${formatDate(data.day2Date)}</strong><br>
+                    ${data.day2CandidPhoto || 0} photographer (candid)<br>
+                    ${data.day2TradPhoto || 0} photographer (traditional)<br>
+                    ${data.day2CandidVideo || 0} videographer (candid)<br>
+                    ${data.day2TradVideo || 0} videographer (traditional)<br>
+                    ${data.day2Drone ? `${data.day2Drone} drone` : ''}
+                </div>`;
+            }
+
+            // Day 3
+            if (data.day3Date) {
+                serviceHTML += `<div class="service-details">
+                    <strong>${formatDate(data.day3Date)}</strong><br>
+                    ${data.day3CandidPhoto || 0} photographer (candid)<br>
+                    ${data.day3TradPhoto || 0} photographer (traditional)<br>
+                    ${data.day3CandidVideo || 0} videographer (candid)<br>
+                    ${data.day3TradVideo || 0} videographer (traditional)
+                </div>`;
+            }
+
+            // Paat Bidai
+            serviceHTML += `<div class="service-details">
+                <strong>Paat Bidai</strong><br>
+                ${data.bidaiPhoto || 2} Photographer<br>
+                ${data.bidaiVideo || 2} videographer<br>
+                (Team split)
+            </div>`;
+
+            // Pre Wedding
+            serviceHTML += `<div class="service-details">
+                <strong>Pre wedding:</strong><br>
+                ${data.preWeddingPhoto || 1} Photographer<br>
+                (Half day shoot, ${data.preWeddingOutfits || 2} Outfit)<br>
+                ${data.designedPictures || 30} Design picture<br>
+                Unlimited Raw picture
+            </div>`;
+
+            return serviceHTML;
         }
 
-        function exportImage() {
-            const element = document.getElementById('quotationPreview');
-            
-            html2canvas(element, {
-                scale: 2,
-                useCORS: true,
-                letterRendering: 1,
-                allowTaint: false
-            }).then(canvas => {
-                const link = document.createElement('a');
-                const clientName = document.getElementById('clientName').value || 'Client';
-                link.download = `${clientName}_Wedding_Quotation.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-            });
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB');
+        }
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('en-IN').format(num);
         }
 
         function printQuotation() {
-            const printWindow = window.open('', '_blank');
-            const quotationContent = document.getElementById('quotationPreview').innerHTML;
+            const quotationContent = document.getElementById('quotationOutput');
+            if (quotationContent.classList.contains('hidden')) {
+                alert('Please generate quotation first!');
+                return;
+            }
             
+            const printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>Wedding Quotation</title>');
+            printWindow.document.write('<style>');
             printWindow.document.write(`
-                <html>
-                    <head>
-                        <title>Adam Filims - Wedding Quotation</title>
-                        <style>
-                            body { font-family: Arial, sans-serif; margin: 20px; }
-                            .quotation-preview { background: white; }
-                            .quotation-header { text-align: center; border-bottom: 2px solid #0f2862; padding-bottom: 20px; margin-bottom: 25px; }
-                            .quotation-header h1 { color: #0f2862; font-size: 2rem; margin-bottom: 10px; }
-                            .service-breakdown { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; }
-                            .total-section { background: #0f2862; color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
-                            .payment-schedule { background: #f0f4f8; padding: 15px; border-radius: 8px; margin: 15px 0; }
-                            .terms { font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 15px; margin-top: 20px; }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="quotation-preview">${quotationContent}</div>
-                    </body>
-                </html>
+                body { font-family: 'Times New Roman', serif; line-height: 1.6; color: #333; }
+                .quotation-header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #333; padding-bottom: 20px; }
+                .company-name { font-size: 28px; font-weight: bold; margin-bottom: 10px; color: #2c3e50; }
+                .contract-title { font-size: 20px; color: #34495e; }
+                .contract-section { margin-bottom: 25px; }
+                .section-heading { font-size: 18px; font-weight: bold; color: #2c3e50; margin-bottom: 10px; text-decoration: underline; }
+                .service-details { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; }
+                .amount-section { background: #e8f5e8; padding: 20px; border-radius: 10px; border: 2px solid #27ae60; }
+                .terms-section { background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeaa7; margin-top: 20px; }
             `);
-            
+            printWindow.document.write('</style></head><body>');
+            printWindow.document.write(quotationContent.innerHTML);
+            printWindow.document.write('</body></html>');
             printWindow.document.close();
             printWindow.print();
         }
+
+        // Set today's date as default for contract date
+        document.getElementById('contractDate').valueAsDate = new Date();
     </script>
 </body>
 </html>
